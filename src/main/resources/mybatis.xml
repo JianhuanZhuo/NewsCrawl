@@ -4,8 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <properties resource="database.properties"/>
+    <!--<settings>-->
+        <!--<setting name="logImpl" value="STDOUT_LOGGING" />-->
+    <!--</settings>-->
     <typeAliases>
-        <package name="cn.keepfight.graziani.dao"/>
+        <package name="cn.keepfight.dao"/>
     </typeAliases>
     <environments default="development">
         <environment id="development">
@@ -13,8 +16,6 @@
             <dataSource type="POOLED">
                 <property name="driver" value="${jdbc.driver}"/>
                 <property name="url" value="${jdbc.url}"/>
-                <property name="username" value="${jdbc.username}"/>
-                <property name="password" value="${jdbc.password}"/>
 
                 <property name="poolMaximumActiveConnections" value="20"/>
                 <property name="poolMaximumIdleConnections" value="5"/>

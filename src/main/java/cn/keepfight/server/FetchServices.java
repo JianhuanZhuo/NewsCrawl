@@ -1,5 +1,7 @@
 package cn.keepfight.server;
 
+import cn.keepfight.dao.IPProxyDao;
+import cn.keepfight.jdbc.IPProxyServices;
 import cn.keepfight.utils.function.FunctionCheck;
 import cn.keepfight.utils.function.FunctionCheckIO;
 import org.apache.http.client.config.CookieSpecs;
@@ -41,10 +43,31 @@ public abstract class FetchServices {
     }
 
     public static <T> T applyHttpclient(boolean proxy, FunctionCheck<CloseableHttpClient, T> consumer) throws Exception {
-        return consumer.apply(HttpClients.custom()
-                .setDefaultRequestConfig(ProxyServices.getRequestConfig(proxy))
-                .setRedirectStrategy(new LaxRedirectStrategy())
-                .build());
+        if (proxy) {
+            IPProxyDao dao = IPProxyServices.pickLastTime();
+            System.out.println("using proxy : " + dao);
+            try {
+                T res = consumer.apply(HttpClients.custom()
+                        .setDefaultRequestConfig(ProxyServices.getRequestConfig(dao))
+                        .setRedirectStrategy(new LaxRedirectStrategy())
+                        .build());
+                if (dao != null) IPProxyServices.goodByID(dao.getId());
+                return res;
+            } catch (Exception e) {
+                if (dao != null) {
+                    if (dao.getFails() <= 0) {
+                        IPProxyServices.deleteById(dao.getId());
+                    }else {
+                        IPProxyServices.badByID(dao.getId());
+                    }
+                }
+                throw e;
+            }
+        } else {
+            return consumer.apply(HttpClients.custom()
+                    .setRedirectStrategy(new LaxRedirectStrategy())
+                    .build());
+        }
     }
 
     /**

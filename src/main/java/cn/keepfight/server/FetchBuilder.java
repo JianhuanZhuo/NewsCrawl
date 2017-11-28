@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public class FetchBuilder<K> {
     private String url = "";
     private List<Pair<String, String>> params = new ArrayList<>(1);
+    private List<Pair<String, String>> header = new ArrayList<>(1);
     private FetchServices.SUPPORT_METHODS method = FetchServices.SUPPORT_METHODS.GET;
     private FunctionCheckIO<InputStreamReader, K> processor = null;
 
@@ -64,12 +65,20 @@ public class FetchBuilder<K> {
         return processor;
     }
 
+    public List<Pair<String, String>> getHeader() {
+        return header;
+    }
+
+    public FetchBuilder<K> setHeader(List<Pair<String, String>> header) {
+        this.header = header;
+        return this;
+    }
 
     public K fetch(CloseableHttpClient httpclient) throws Exception {
 
         HttpUriRequest methodAction;
 
-        if (httpclient==null){
+        if (httpclient == null) {
             throw new Exception("httpclient not allow null");
         }
 
@@ -89,13 +98,13 @@ public class FetchBuilder<K> {
                 throw new Exception("not support method : " + getMethod());
         }
 
-        System.out.println("请求方法: " + getMethod());
-        System.out.println("请求时间: " + FXUtils.stampToDateTime(System.currentTimeMillis()));
-        System.out.println("请求地址: " + methodAction.getRequestLine());
-        System.out.println("请求参数: " + getParams());
+//        System.out.println("请求方法: " + getMethod());
+//        System.out.println("请求时间: " + FXUtils.stampToDateTime(System.currentTimeMillis()));
+//        System.out.println("请求地址: " + methodAction.getRequestLine());
+//        System.out.println("请求参数: " + getParams());
 
-        methodAction.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
-        methodAction.setHeader("Host", "www.xicidaili.com");
+        methodAction.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
+        header.forEach(x -> methodAction.addHeader(x.getKey(), x.getValue()));
 
         return httpclient.execute(
                 methodAction, httpResponse -> {
@@ -106,8 +115,8 @@ public class FetchBuilder<K> {
                             return getProcessor().apply(br);
                         }
                     } else {
-                        System.out.println("httpResponse.getStatusLine().getStatusCode():"+httpResponse.getStatusLine().getStatusCode());
-                        System.out.println("entity : "+entity);
+                        System.out.println("httpResponse.getStatusLine().getStatusCode():" + httpResponse.getStatusLine().getStatusCode());
+                        System.out.println("entity : " + entity);
                         Charset charset = ContentType.getOrDefault(entity).getCharset();
                         try (InputStreamReader br = new InputStreamReader(entity.getContent(), charset)) {
                             BufferedReader buf = new BufferedReader(br);

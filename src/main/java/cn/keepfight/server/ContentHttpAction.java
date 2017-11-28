@@ -12,12 +12,7 @@ import java.util.regex.Pattern;
  * 基于模式获取的 Http 动作
  * Created by tom on 2017/9/8.
  */
-public class PatternHttpAction {
-
-    private Pattern pattern;
-    public PatternHttpAction(String express){
-        pattern = Pattern.compile(express);
-    }
+public class ContentHttpAction {
 
     public FunctionCheckIO<InputStreamReader, String> getProcessor() throws IOException{
         return inputStreamReader -> {
@@ -28,12 +23,7 @@ public class PatternHttpAction {
             while ((x = br.readLine()) != null) {
                 content.append(x).append("\n");
             }
-            // 匹配
-            Matcher m = pattern.matcher(content.toString());
-            if (m.find()) {
-                return m.group(1);
-            }
-            return null;
+            return content.toString();
         };
     }
 }

@@ -1,7 +1,9 @@
 package cn.keepfight.Mapper;
 
-import cn.keepfight.newsCrawl.IPProxyDao;
+import cn.keepfight.dao.IPProxyDao;
+import org.apache.ibatis.annotations.Param;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -11,11 +13,18 @@ public interface IPProxyMapper {
 
     void insert(IPProxyDao dao) throws Exception;
 
-    void update(IPProxyDao dao) throws Exception;
+    void insertList(List<IPProxyDao> daoList) throws Exception;
 
-    List<IPProxyDao> selectAll() throws Exception;
-
-    IPProxyDao selectById(int id) throws Exception;
+    List<IPProxyDao> selectPage() throws Exception;
 
     void deleteById(int id) throws Exception;
+
+    IPProxyDao pickLastTime() throws Exception;
+
+    void updateLastByID(@Param("id") int id,
+                        @Param("lasttime") Timestamp lasttime) throws Exception;
+
+    void goodByID(@Param("id") int id) throws Exception;
+
+    void badByID(@Param("id") int id) throws Exception;
 }

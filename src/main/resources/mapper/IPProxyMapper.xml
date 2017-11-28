@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.keepfight.Mapper.IPProxyMapper">
+
+    <insert id="insert" parameterType="IPProxyDao">
+        INSERT OR IGNORE INTO ips(ip, port, lastTime, fails)
+        VALUES ( #{ip}, #{port}, #{lastTime}, #{fails})
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            SELECT last_insert_rowid();
+        </selectKey>
+    </insert>
+
+    <insert id="insertList" parameterType="java.util.List">
+        INSERT OR IGNORE INTO main.ips(ip, port, lastTime, fails)
+        VALUES
+        <foreach collection="list" item="dao" index="index" separator=",">
+            (#{dao.ip}, #{dao.port}, #{dao.lastTime}, #{dao.fails})
+        </foreach>
+    </insert>
+
+    <select id="selectPage" resultType="IPProxyDao">
+        SELECT *
+        FROM ips
+        ORDER BY lasttime
+            DESC
+        LIMIT 10
+    </select>
+
+    <select id="pickLastTime" resultType="IPProxyDao">
+        SELECT *
+        FROM ips
+        ORDER BY lasttime
+            ASC
+        LIMIT 1
+    </select>
+
+    <update id="updateLastByID">
+        UPDATE ips
+        SET
+            lasttime = #{lasttime}
+        WHERE id = #{id}
+    </update>
+
+    <update id="goodByID">
+        UPDATE ips
+        SET
+            fails = (fails + 1)
+        WHERE id = #{id}
+    </update>
+
+    <update id="badByID">
+        UPDATE ips
+        SET
+            fails = 0
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="int">
+        DELETE FROM ips
+        WHERE id = #{id}
+    </delete>
+</mapper>

@@ -432,12 +432,6 @@ public class FXWidgetUtil {
             c.setCellFactory(TextFieldTableCell.forTableColumn(converter));
         }
     }
-
-    @SafeVarargs
-    public static<T> void cellDecimal(TableColumn<T, BigDecimal>... cs){
-        cellDecimal(FXUtils.decimalConverter("0"), cs);
-    }
-
     @SafeVarargs
     public static<T> void cellInteger(StringConverter<Integer> converter, TableColumn<T, Integer>... cs){
         for (TableColumn<T, Integer> c : cs) {
@@ -456,12 +450,6 @@ public class FXWidgetUtil {
             c.setCellFactory(TextFieldTableCell.forTableColumn(converter));
         }
     }
-
-    @SafeVarargs
-    public static<T> void cellLong(TableColumn<T, Long>... cs){
-        cellLong(FXUtils.longConverter("0"), cs);
-    }
-
     public static StringBinding sBinding(String s){
         return new StringBinding() {
             @Override
