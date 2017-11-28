@@ -28,9 +28,21 @@
         LIMIT 10
     </select>
 
+
+    <select id="pickForCheck" resultType="IPProxyDao">
+        SELECT *
+        FROM ips
+        WHERE fails = 0 OR strftime('%s', 'now') - lasttime / 1000 > 300
+        ORDER BY lasttime
+            ASC
+        LIMIT 1
+    </select>
+
+
     <select id="pickLastTime" resultType="IPProxyDao">
         SELECT *
         FROM ips
+        WHERE fails > 0
         ORDER BY lasttime
             ASC
         LIMIT 1

@@ -4,6 +4,7 @@ import cn.keepfight.dao.IPProxyDao;
 import cn.keepfight.jdbc.IPProxyServices;
 import cn.keepfight.utils.function.FunctionCheck;
 import cn.keepfight.utils.function.FunctionCheckIO;
+import cn.keepfight.utils.function.SupplierCheck;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -11,6 +12,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 
 import java.io.InputStreamReader;
+import java.util.function.Supplier;
 
 public abstract class FetchServices {
 
@@ -57,7 +59,7 @@ public abstract class FetchServices {
                 if (dao != null) {
                     if (dao.getFails() <= 0) {
                         IPProxyServices.deleteById(dao.getId());
-                    }else {
+                    } else {
                         IPProxyServices.badByID(dao.getId());
                     }
                 }
@@ -67,6 +69,28 @@ public abstract class FetchServices {
             return consumer.apply(HttpClients.custom()
                     .setRedirectStrategy(new LaxRedirectStrategy())
                     .build());
+        }
+    }
+
+    public static <T> T applyHttpclient(SupplierCheck<IPProxyDao> ipProxyDaoSupplier, FunctionCheck<CloseableHttpClient, T> consumer) throws Exception {
+        IPProxyDao dao = ipProxyDaoSupplier.get();
+        System.out.println("using proxy : " + dao);
+        try {
+            T res = consumer.apply(HttpClients.custom()
+                    .setDefaultRequestConfig(ProxyServices.getRequestConfig(dao))
+                    .setRedirectStrategy(new LaxRedirectStrategy())
+                    .build());
+            if (dao != null) IPProxyServices.goodByID(dao.getId());
+            return res;
+        } catch (Exception e) {
+            if (dao != null) {
+                if (dao.getFails() <= 0) {
+                    IPProxyServices.deleteById(dao.getId());
+                } else {
+                    IPProxyServices.badByID(dao.getId());
+                }
+            }
+            throw e;
         }
     }
 

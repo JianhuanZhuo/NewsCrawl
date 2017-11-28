@@ -15,6 +15,11 @@ public class IPProxyDao {
     public IPProxyDao() {
     }
 
+    public IPProxyDao(String ip, Integer port) {
+        this.ip = ip;
+        this.port = port;
+    }
+
     public IPProxyDao(String line) {
         try {
             String[] ss = line.split(" ");

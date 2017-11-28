@@ -37,6 +37,13 @@ public abstract class IPProxyServices {
         return res;
     }
 
+
+    public static synchronized IPProxyDao pickForCheck() throws Exception {
+        IPProxyDao res = FXUtils.getMapper(factory, IPProxyMapper.class, IPProxyMapper::pickForCheck);
+        if (res != null) updateLastByID(res.getId(), new Timestamp(System.currentTimeMillis()));
+        return res;
+    }
+
     public static void updateLastByID(int id, Timestamp lasttime) throws Exception {
         try (SqlSession session = factory.openSession(true)) {
             session.getMapper(IPProxyMapper.class).updateLastByID(id, lasttime);

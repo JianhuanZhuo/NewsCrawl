@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.keepfight.Mapper.ArticleMapper">
+
+    <insert id="insert" parameterType="ArticleDao">
+        INSERT OR IGNORE INTO article(url, crawltime, upodatetime, pubtime, title, pic, abs, file)
+        VALUES (#{url}, #{crawltime}, #{upodatetime}, #{pubtime}, #{title}, #{pic}, #{abs}, #{file})
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            SELECT last_insert_rowid();
+        </selectKey>
+    </insert>
+
+
+    <select id="pickLastTime" resultType="ArticleDao">
+        SELECT *
+        FROM article
+        WHERE fails > 0
+        ORDER BY lasttime
+            ASC
+        LIMIT 1
+    </select>
+
+    <update id="updateLastByID">
+        UPDATE article
+        SET
+            lasttime = #{lasttime}
+        WHERE id = #{id}
+    </update>
+
+    <update id="goodByID">
+        UPDATE article
+        SET
+            fails = (fails + 1)
+        WHERE id = #{id}
+    </update>
+
+    <update id="badByID">
+        UPDATE article
+        SET
+            fails = 0
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="int">
+        DELETE FROM article
+        WHERE id = #{id}
+    </delete>
+</mapper>

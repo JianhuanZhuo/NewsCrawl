@@ -20,6 +20,7 @@ public interface IPProxyMapper {
     void deleteById(int id) throws Exception;
 
     IPProxyDao pickLastTime() throws Exception;
+    IPProxyDao pickForCheck() throws Exception;
 
     void updateLastByID(@Param("id") int id,
                         @Param("lasttime") Timestamp lasttime) throws Exception;
