@@ -6,3 +6,6 @@
 .idea
 *.iml
 target
+cmt
+article
+index

@@ -4,9 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <properties resource="database.properties"/>
-    <settings>
-        <setting name="logImpl" value="STDOUT_LOGGING" />
-    </settings>
+    <!--<settings>-->
+        <!--<setting name="logImpl" value="STDOUT_LOGGING" />-->
+    <!--</settings>-->
     <typeAliases>
         <package name="cn.keepfight.dao"/>
     </typeAliases>
@@ -27,5 +27,6 @@
 
     <mappers>
         <mapper resource="mapper/IPProxyMapper.xml"/>
+        <mapper resource="mapper/ArticleMapper.xml"/>
     </mappers>
 </configuration>

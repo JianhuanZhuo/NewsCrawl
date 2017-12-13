@@ -1,12 +1,9 @@
 package cn.keepfight.utils.lang;
 
-import javafx.beans.NamedArg;
-
 import java.io.Serializable;
 
 /**
  * <p>A convenience class to represent name-value pairs.</p>
- * @since JavaFX 2.0
  */
 public class Pair<K,V> implements Serializable {
 
@@ -37,7 +34,7 @@ public class Pair<K,V> implements Serializable {
      * @param key The key for this pair
      * @param value The value to use for this pair
      */
-    public Pair(@NamedArg("key") K key, @NamedArg("value") V value) {
+    public Pair(K key, V value) {
         this.key = key;
         this.value = value;
     }

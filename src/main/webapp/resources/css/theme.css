@@ -1,0 +1,101 @@
+* {
+    font-family: Verdana, "微软雅黑", Geneva, sans-serif;
+}
+
+.head-line{
+    display: flex;
+    align-items: flex-end;
+}
+
+
+.head-container{
+    background-color: #eeeeee;
+    border-bottom: 2px solid #cccccc;
+    padding: 15px 5px 5px 5px;
+    margin-bottom: 10px;
+}
+
+.param-container{
+    border-top: solid 1px #cccccc;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+
+.new_item{
+    display: flex;
+    padding: 5px;
+    /*border-bottom: solid 1px #cccccc;*/
+}
+.new_item>*{
+    margin: 5px;
+}
+
+.new_item>.new_item_img{
+}
+
+.new_item>.new_item_img>.thumbnail{
+    width: 150px;
+}
+
+.title-link{
+    font-size: 16px;
+}
+
+/*工具样式类*/
+.jh-center {
+    display: flex;
+    justify-content: center;
+}
+
+.jh-margin{
+    margin: 5px;
+}
+.jh-padding{
+    padding: 5px;
+}
+
+.center-pane {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*margin-top: 200px;*/
+    margin-top: 10%;
+}
+
+.foot{
+    background-color: #eeeeee;
+    color: #666666;
+}
+
+.info-pane {
+    width: 500px;
+}
+
+.page-full-height {
+    min-height: 600px;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-center > * {
+    margin-bottom: 10px;
+}
+
+.flex-center.flex-col {
+    flex-direction: column;
+}
+
+.pagination > li > a, .pagination > li > span {
+    border-radius: 50% !important;
+    margin: 0 5px;
+}
+
+/* The max width is dependant on the container (more info below) */
+.popover{
+    max-width: 100%; /* Max Width of the popover (depending on the container!) */
+}

@@ -91,8 +91,9 @@ public class FetchBuilder<K> {
                 methodAction = post;
                 break;
             case GET:
-                methodAction = new HttpGet(getUrl() + getParams().stream().map(x -> x.getKey() + "=" + x.getValue())
-                        .collect(Collectors.joining("&", "?", "")));
+                String paramStr = getParams().size() > 0 ? getParams().stream().map(x -> x.getKey() + "=" + x.getValue())
+                        .collect(Collectors.joining("&", "?", "")) : "";
+                methodAction = new HttpGet(getUrl() +paramStr);
                 break;
             default:
                 throw new Exception("not support method : " + getMethod());
@@ -111,11 +112,11 @@ public class FetchBuilder<K> {
                     HttpEntity entity = httpResponse.getEntity();
                     if (httpResponse.getStatusLine().getStatusCode() < 300 && entity != null) {
                         Charset charset = ContentType.getOrDefault(entity).getCharset();
-                        if (charset==null){
+                        if (charset == null) {
                             try (InputStreamReader br = new InputStreamReader(entity.getContent())) {
                                 return getProcessor().apply(br);
                             }
-                        }else {
+                        } else {
                             try (InputStreamReader br = new InputStreamReader(entity.getContent(), charset)) {
                                 return getProcessor().apply(br);
                             }

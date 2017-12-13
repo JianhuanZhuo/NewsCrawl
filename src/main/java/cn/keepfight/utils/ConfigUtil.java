@@ -1,6 +1,6 @@
 package cn.keepfight.utils;
 
-import javafx.util.Pair;
+import cn.keepfight.utils.lang.Pair;
 
 import java.io.*;
 import java.util.Properties;
